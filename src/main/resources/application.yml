@@ -1,0 +1,47 @@
+server:
+  port: 3100
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: git
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Barrier-Free-Friends/project-config
+          default-label: main
+          search-paths:
+            - configs/common
+            - configs/{application}/{profile}
+            - configs/{application}
+
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: 34.47.77.34
+
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://34.47.77.34:3150/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info,prometheus,metrics
+
+  endpoint:
+    prometheus:
+      enabled: true
+    metrics:
+      enabled: true
+      export:
+        prometheus:
+          enabled: true
+      tags:
+        application: ${spring.application.name}
